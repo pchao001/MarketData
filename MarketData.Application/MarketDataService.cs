@@ -130,6 +130,10 @@ namespace MarketData.Application
             return result;
         }
 
+        public async Task<bool> Create(MarketModel model)
+        {
+            return await _repo.Create(model);
+        }
         /// <summary>
         /// 判斷是否為連續日期
         /// </summary>

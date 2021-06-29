@@ -41,5 +41,6 @@ namespace MarketData.Application
         /// <returns></returns>
         Task<YieldRateModel> GetStrictYieldRateRange(string stockCode, string fromDate, string endDate);
 
+        Task<bool> Create(MarketModel model);
     }
 }

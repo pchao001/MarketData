@@ -5,6 +5,7 @@
 ## Required Software
 - SQL Server 2016 express
 - VS Code / Visutial Studio 2019
+- .net core 3.1 SDK
 
 ## Database Setup
 - CREATE DATABASE [MarketDataDB]
@@ -36,4 +37,14 @@ CREATE TABLE [dbo].[MarketData](
 - dotnet run
 
 ## Function Scopt
-## 
+## swagger
+### http://localhost:5000/swagger/index.html
+
+* 依照證券代號 搜尋最近n天的資料 
+
+* 指定特定日期 顯示當天本益比前n名
+* 指定日期範圍、證券代號 顯示這段時間內殖利率 
+	為嚴格遞增的最長天數並顯示開始、結束日期
+* 匯入資料
+* 新增MarketData
+ 
