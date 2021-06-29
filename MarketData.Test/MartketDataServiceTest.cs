@@ -1,4 +1,5 @@
 using MarketData.Application;
+using MarketData.Model;
 using MarketData.Persistence;
 using Microsoft.Extensions.Configuration;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -8,13 +9,13 @@ using System.Net.Http;
 namespace MarketData.Test
 {
     [TestClass]
-    public class MartketDataImportTest
+    public class MartketDataServiceTest
     {
         private readonly IConfigurationRoot _config;
         private readonly HttpClient _client;
         private readonly IMarketDataRepository _repo;
         private readonly IMarketDataService _service;
-        public MartketDataImportTest()
+        public MartketDataServiceTest()
         {
             _config = TestHelper.ReadFromAppSettings();
             _client = new HttpClient { BaseAddress = new Uri(_config["MarketDataUrl"]) };
@@ -31,43 +32,70 @@ namespace MarketData.Test
             {
                 var sDate = storeDate.ToString("yyyyMMdd");
                 System.Console.WriteLine(sDate);
-                ImportTest(sDate);
+                _service.Import(sDate);
                 storeDate = storeDate.AddDays(1);
             }
         }
-        //[TestMethod]
-        public void ImportTest(string storeDate)
+
+
+        [TestMethod]
+        public void ImportTest()
         {
-           
+
             var config = TestHelper.ReadFromAppSettings();
             var client = new HttpClient { BaseAddress = new Uri(config["MarketDataUrl"]) };
 
             var repo = new MarketDataRepository(config);
 
-            if (string.IsNullOrEmpty( storeDate))
-                storeDate = "20210628";
+            var storeDate = "20210629";
             var service = new MarketDataService(config, client, repo);
-            service.Import(storeDate).Wait();
+            var result = service.Import(storeDate).Result;
+
+            Assert.IsTrue(result);
         }
 
+        [TestMethod]
         public void GetLatestDataTest()
         {
-            
+
             var stockCode = "1101";
             var result = _service.GetLatestData(stockCode, 10).Result;
 
             Assert.IsTrue(result.Count > 0);
         }
 
-        public void GetLatestTopPERatioData()
+        [TestMethod]
+
+        public void GetLatestTopPERatioDataTest()
         {
 
             var storeDate = "20210628";
             var tops = 10;
-            var result = 
+            var result =
                 _service.GetLatestTopPERatioData(storeDate, tops).Result;
 
             Assert.IsTrue(result.Count > 0);
         }
+
+        [TestMethod]
+        public void GetStrictYieldRateRangeTest()
+        {
+            var stockCode = "1108";
+            var fromDate = "20210601";
+            var endDate = "20210628";
+            var result = _service.GetStrictYieldRateRange(stockCode,
+                    fromDate, endDate).Result;
+
+
+            Assert.IsTrue(result.StartDate == "20210608");
+            Assert.IsTrue(result.EndDate == "20210610");
+
+            Assert.IsTrue(result.Lists.Count == 3);
+
+        }
+
+
+
+
     }
 }

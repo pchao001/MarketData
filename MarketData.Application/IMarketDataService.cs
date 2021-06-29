@@ -8,7 +8,12 @@ namespace MarketData.Application
 {
     public  interface IMarketDataService
     {
-        Task Import(string storeDate);
+        /// <summary>
+        /// 匯入MarketData
+        /// </summary>
+        /// <param name="storeDate"></param>
+        /// <returns></returns>
+        Task<bool> Import(string storeDate);
 
         /// <summary>
         /// 依照證券代號 搜尋最近n天的資料
@@ -25,5 +30,16 @@ namespace MarketData.Application
         /// <param name="tops"></param>
         /// <returns></returns>
         Task<List<MarketModel>> GetLatestTopPERatioData(string storeDate, int tops);
+
+        /// <summary>
+        /// 指定日期範圍、證券代號 顯示這段時間內殖利率 
+        /// 為嚴格遞增的最長天數並顯示開始、結束日期
+        /// </summary>
+        /// <param name="stockCode"></param>
+        /// <param name="fromDate"></param>
+        /// <param name="endDate"></param>
+        /// <returns></returns>
+        Task<YieldRateModel> GetStrictYieldRateRange(string stockCode, string fromDate, string endDate);
+
     }
 }

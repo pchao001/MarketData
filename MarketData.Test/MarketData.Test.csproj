@@ -35,7 +35,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\MarketData.Application\MarketData.Application.csproj" />
-    <ProjectReference Include="..\MarketData.Persistence\MarketData.Persistence.csproj" />
+    <ProjectReference Include="..\MarketData.Persistence\MarketData.Persistence.SqlServer.csproj" />
   </ItemGroup>
 
 </Project>

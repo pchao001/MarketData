@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\MarketData.Persistence\MarketData.Persistence.csproj" />
+    <ProjectReference Include="..\MarketData.Persistence\MarketData.Persistence.SqlServer.csproj" />
   </ItemGroup>
 
 </Project>

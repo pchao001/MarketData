@@ -3,15 +3,20 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30907.101
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MarketData.API", "MarketData.API\MarketData.API.csproj", "{A4304674-0971-4A34-9754-CFC527FA5208}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MarketData.API", "MarketData.API\MarketData.API.csproj", "{A4304674-0971-4A34-9754-CFC527FA5208}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MarketData.Model", "MarketData.Model\MarketData.Model.csproj", "{8BAB0CDC-976D-41D5-BFF4-DE79A23E9C8A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MarketData.Model", "MarketData.Model\MarketData.Model.csproj", "{8BAB0CDC-976D-41D5-BFF4-DE79A23E9C8A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MarketData.Persistence", "MarketData.Persistence\MarketData.Persistence.csproj", "{763CDC5D-73B3-4F69-B7DB-6E070CA244E2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MarketData.Persistence.SqlServer", "MarketData.Persistence\MarketData.Persistence.SqlServer.csproj", "{763CDC5D-73B3-4F69-B7DB-6E070CA244E2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MarketData.Application", "MarketData.Application\MarketData.Application.csproj", "{1691B543-BDD0-4128-BFDB-5DE76FC38A1E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MarketData.Application", "MarketData.Application\MarketData.Application.csproj", "{1691B543-BDD0-4128-BFDB-5DE76FC38A1E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MarketData.Test", "MarketData.Test\MarketData.Test.csproj", "{86B64E34-0EAC-4E21-A4CC-F26CFD012BF0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MarketData.Test", "MarketData.Test\MarketData.Test.csproj", "{86B64E34-0EAC-4E21-A4CC-F26CFD012BF0}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{833A1AE9-9819-48FC-BAC8-9CFFE32B3141}"
+	ProjectSection(SolutionItems) = preProject
+		README.md = README.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

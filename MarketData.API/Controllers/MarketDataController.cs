@@ -36,5 +36,26 @@ namespace MarketData.API.Controllers
             return Ok(result);
         }
 
+        //GetStrictYieldRateRange
+        [HttpGet()]
+        [Route("GetStrictYieldRateRange")]
+        public async Task<ActionResult<YieldRateModel>> GetStrictYieldRateRange(
+            string stockCode, string fromDate, string endDate)
+        {
+            var result = await _service.GetStrictYieldRateRange(stockCode, fromDate, endDate);
+
+            return Ok(result);
+        }
+
+        [HttpPost()]
+        [Route("Import")]
+        public async Task<ActionResult> Import(
+           string storeDate)
+        {
+            var result = await _service.Import(storeDate);
+
+            return Ok(result);
+        }
+
     }
 }

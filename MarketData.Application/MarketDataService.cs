@@ -23,7 +23,7 @@ namespace MarketData.Application
             _repo = repo;
         }
         //import
-        public async Task Import(string storeDate)
+        public async Task<bool> Import(string storeDate)
         {
             var url = $"/exchangeReport/BWIBBU_d?response=json&date={storeDate}&selectType=ALL";
             // insert into table
@@ -38,7 +38,7 @@ namespace MarketData.Application
 
             if (data == null)
             {
-                return;
+                return false;
             }
             await _repo.Delete(storeDate);
 
@@ -61,7 +61,7 @@ namespace MarketData.Application
                 await _repo.Create(model);
             }
 
-
+            return true;
         }
 
         public async Task<List<MarketModel>> GetLatestData(string stockId, int days)
@@ -74,6 +74,82 @@ namespace MarketData.Application
             return await _repo.GetLatestTopPERatioData(storeDate, tops);
         }
 
+        public async Task<YieldRateModel> GetStrictYieldRateRange(
+            string stockCode, 
+            string fromDate, 
+            string endDate)
+        {
+            var result = new YieldRateModel
+            {
+                StockCode = stockCode,
+                StartDate="19000101"
+            };
+
+            var data = await _repo.GetDataByRange(stockCode, fromDate, endDate);
+            bool resetStart = false; // 
+            for (int i = 0; i < data.Count-1; i++)
+            {
+                //如果是連續遞增日期 且YieldRate也是遞增 
+                if (IsNextDate(data[i].StoreDate, data[i+1].StoreDate) && 
+                    data[i+1].YieldRate > data[i].YieldRate)
+                {
+                    // StartData尚未初始化
+                    if (!resetStart)
+                    {
+                        //設定起日
+                        result.StartDate = data[i].StoreDate;
+                        
+                        // 新增起日YieldPair (Date,Rate)
+                        result.Lists.Clear();
+
+                        result.Lists.Add(new YieldPair
+                        {
+                            StoreDate = data[i].StoreDate,
+                            YieldRate = data[i].YieldRate
+                        });
+                        resetStart = true;
+                    }
+
+                    // 設定EndDate
+                    result.EndDate = data[i + 1].StoreDate;
+                    result.Lists.Add(new YieldPair
+                    {
+                        StoreDate = data[i+1].StoreDate,
+                        YieldRate = data[i+1].YieldRate
+                    });
+                }
+                else
+                {
+                    //如果次日Rate 較小,則重新計算
+                    resetStart = false;
+                }
+
+            }
+
+
+            return result;
+        }
+
+        /// <summary>
+        /// 判斷是否為連續日期
+        /// </summary>
+        /// <param name="curDate"></param>
+        /// <param name="nextDate"></param>
+        /// <returns></returns>
+        private bool IsNextDate(string curDate, string nextDate)
+        {
+           
+            var dCurDate = DateTime.ParseExact(curDate, "yyyyMMdd", null).AddDays(1);
+            var dNextDate = DateTime.ParseExact(nextDate, "yyyyMMdd", null);
+
+            return dCurDate == dNextDate;
+        }
+
+        /// <summary>
+        /// 解析PE Ratio
+        /// </summary>
+        /// <param name="token"></param>
+        /// <returns>PE Ratio 如果不是數字,則轉換成0</returns>
         private decimal ParsePERatio(JToken token)
         {
             decimal result = 0;

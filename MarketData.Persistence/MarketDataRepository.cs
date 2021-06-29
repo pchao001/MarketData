@@ -23,6 +23,7 @@ namespace MarketData.Persistence
             _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
 
         }
+        
         public async Task<List<MarketModel>> GetLatestData(string stockId, int days)
         {
             var connString = _configuration["ConnectionStrings:MarketDataDB"];
@@ -60,6 +61,45 @@ namespace MarketData.Persistence
                 return result.AsList<MarketModel>();
             }
         }
+
+        public async Task<List<MarketModel>> GetDataByRange(string stockCode, string fromDate, string endDate)
+        {
+            var connString = _configuration["ConnectionStrings:MarketDataDB"];
+            using (var connection = new SqlConnection(connString))
+            {
+                //排除不是遞增的資料
+
+                var sql = @" select a.*
+                    from MarketData a
+                    left join MarketData after
+                        on a.StockCode = after.StockCode
+                        and Cast(a.StoreDate as date) = DATEADD(day, -1, after.StoreDate)
+                    where a.StockCode = @StockCode
+                        and a.StoreDate >= @FromDate and a.StoreDate <= @EndDate
+                        and after.YieldRate - a.YieldRate > 0
+                ";
+
+                try
+                {
+                    var result =  connection.QueryAsync<MarketModel>(sql,
+                      new
+                      {
+                          StockCode = stockCode,
+                          FromDate = fromDate,
+                          EndDate = endDate
+                      }).Result;
+
+                    return result.AsList<MarketModel>();
+                }
+                catch (Exception)
+                {
+
+                    throw;
+                }
+              
+            }
+        }
+
 
         public async Task<bool> Create(MarketModel model)
         {
